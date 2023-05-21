@@ -11,6 +11,8 @@ axios.interceptors.request.use(function (config) {
 
 export default class JiraApi {
 
+    static cache = new Map<string, any[]>();
+
     static async transitionIssue(issueId: string, transitionId: string) {
         console.log(`Transition issue ${issueId} to ${transitionId}`);
         try {
@@ -27,9 +29,14 @@ export default class JiraApi {
     }
 
     static async getAvailableTransitions(issueId: string) {
-        console.log(`Get available transitions for issue ${issueId}`);
         try {
+            if (this.cache.has(issueId)) {
+                console.log(`returning transitions for issue ${issueId} from cache`);
+                return this.cache.get(issueId);
+            }
+            console.log(`fetching transitions for issue ${issueId}`);
             const response = await axios.get(API_ROUTES.ISSUE_TRANSITION(issueId));
+            this.cache.set(issueId, response.data.transitions);
             return response.data.transitions;
         } catch (error) {
             throw error;

@@ -27,19 +27,23 @@ export = (app: Probot) => {
     const issueIdRegex = idPatternRegex(issuePrefixes);
     const issueId = prTitle.match(issueIdRegex)?.[0];
     if (issueId) {
-      const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
-      if (["reopened", "opened"].includes(action)) {
-        const transitionId = eventTransitionMap.BeforeReview;
-        console.log(availableTransitions, transitionId)
-        if (availableTransitions.some((transition) => transition.id === transitionId)) {
-          await JiraApi.transitionIssue(issueId, transitionId);
+      try {
+
+        const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
+        if (["reopened", "opened"].includes(action)) {
+          const transitionId = eventTransitionMap.BeforeReview;
+          if (availableTransitions.some((transition) => transition.id === transitionId)) {
+            await JiraApi.transitionIssue(issueId, transitionId);
+          }
         }
-      }
-      else if (action === "closed" && pull_request.merged) {
-        const transitionId = eventTransitionMap.AfterMerge;
-        if (availableTransitions.some((transition) => transition.id === transitionId)) {
-          await JiraApi.transitionIssue(issueId, transitionId);
+        else if (action === "closed" && pull_request.merged) {
+          const transitionId = eventTransitionMap.AfterMerge;
+          if (availableTransitions.some((transition) => transition.id === transitionId)) {
+            await JiraApi.transitionIssue(issueId, transitionId);
+          }
         }
+      } catch (error) {
+        console.error(error)
       }
     }
     else {
