@@ -21,7 +21,6 @@ const eventTransitionMap = {
 
 export = (app: Probot) => {
   app.on("pull_request", async (context) => {
-    context.log.info("PR event received");
     const pull_request = context.payload.pull_request;
     const action: string = context.payload.action;
     const prTitle = pull_request.title;
@@ -29,7 +28,6 @@ export = (app: Probot) => {
     const issueId = prTitle.match(issueIdRegex)?.[0];
     if (issueId) {
       const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
-      console.log(action)
       if (["reopened", "opened"].includes(action)) {
         const transitionId = eventTransitionMap.BeforeReview;
         console.log(availableTransitions, transitionId)
@@ -45,7 +43,7 @@ export = (app: Probot) => {
       }
     }
     else {
-      console.log("No issue id found in PR title");
+      console.log(`No issue id found in ${prTitle}`);
     }
   });
 };
