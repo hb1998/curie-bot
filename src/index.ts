@@ -1,7 +1,7 @@
 import { Probot } from "probot";
 import JiraApi from "./jira-api/jiraApi";
 
-const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`^(${issuePrefixes.join('|')})-(\\d+)$`);
+const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`);
 
 const issuePrefixes = ["XPS", "VBI", "XPC"];
 
