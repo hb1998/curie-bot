@@ -29,15 +29,17 @@ export = (app: Probot) => {
     if (issueIds.length) {
       issueIds.forEach(async (issueId) => {
         try {
-          const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
+          const getAvailableTransitions = async () => await JiraApi.getAvailableTransitions(issueId);
           if (["reopened", "opened"].includes(action)) {
             const transitionId = eventTransitionMap.BeforeReview;
+            const availableTransitions = await getAvailableTransitions();
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
             }
           }
           else if (action === "closed" && pull_request.merged) {
             const transitionId = eventTransitionMap.AfterMerge;
+            const availableTransitions = await getAvailableTransitions();
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
             }
