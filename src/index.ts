@@ -3,7 +3,7 @@ import JiraApi from "./jira-api/jiraApi";
 
 const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`, "gi");
 
-const issuePrefixes = ["XPS", "VBI", "XPC"];
+const issuePrefixes = ["XPS", "VBI", "XPC","VALQ"];
 
 const transitions = {
   InCodeReview: "251",
@@ -25,7 +25,7 @@ export = (app: Probot) => {
     const action: string = context.payload.action;
     const prContents = [pull_request.title, pull_request.body]
     const issueIdRegex = idPatternRegex(issuePrefixes);
-    const issueIds = [...prContents.join(" ").match(issueIdRegex)];
+    const issueIds = prContents.join(" ").match(issueIdRegex);
     if (issueIds.length) {
       issueIds.forEach(async (issueId) => {
         try {
@@ -35,6 +35,8 @@ export = (app: Probot) => {
             const availableTransitions = await getAvailableTransitions();
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
+            } else {
+              console.log('No transition available')
             }
           }
           else if (action === "closed" && pull_request.merged) {
@@ -42,7 +44,11 @@ export = (app: Probot) => {
             const availableTransitions = await getAvailableTransitions();
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
+            } else {
+              console.log('No transition available')
             }
+          } else {
+            console.log('No required events')
           }
         } catch (error) {
           console.error(error)
