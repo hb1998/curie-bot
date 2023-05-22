@@ -25,9 +25,9 @@ export = (app: Probot) => {
     const action: string = context.payload.action;
     const prContents = [pull_request.title, pull_request.body]
     const issueIdRegex = idPatternRegex(issuePrefixes);
-    const issueIds = prContents.join(" ").match(issueIdRegex);
+    const issueIds = [...prContents.join(" ").match(issueIdRegex)];
     if (issueIds.length) {
-      issuePrefixes.forEach(async (issueId) => {
+      issueIds.forEach(async (issueId) => {
         try {
           const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
           if (["reopened", "opened"].includes(action)) {
