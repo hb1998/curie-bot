@@ -5,7 +5,9 @@ axios.interceptors.request.use(function (config) {
     const username = process.env.JIRA_USERNAME;
     const password = process.env.JIRA_TOKEN;
     config.headers.Authorization = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
-
+    config.headers.Accept = 'application/json';
+    config.headers['Content-Type'] = 'application/json';
+    console.log(config)
     return config;
 });
 
