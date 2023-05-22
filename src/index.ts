@@ -1,7 +1,7 @@
 import { Probot } from "probot";
 import JiraApi from "./jira-api/jiraApi";
 
-const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`);
+const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`, "gi");
 
 const issuePrefixes = ["XPS", "VBI", "XPC"];
 
@@ -23,31 +23,32 @@ export = (app: Probot) => {
   app.on("pull_request", async (context) => {
     const pull_request = context.payload.pull_request;
     const action: string = context.payload.action;
-    const prTitle = pull_request.title;
+    const prContents = [pull_request.title, pull_request.body]
     const issueIdRegex = idPatternRegex(issuePrefixes);
-    const issueId = prTitle.match(issueIdRegex)?.[0];
-    if (issueId) {
-      try {
-
-        const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
-        if (["reopened", "opened"].includes(action)) {
-          const transitionId = eventTransitionMap.BeforeReview;
-          if (availableTransitions.some((transition) => transition.id === transitionId)) {
-            await JiraApi.transitionIssue(issueId, transitionId);
+    const issueIds = prContents.join(" ").match(issueIdRegex);
+    if (issueIds.length) {
+      issuePrefixes.forEach(async (issueId) => {
+        try {
+          const availableTransitions = await JiraApi.getAvailableTransitions(issueId);
+          if (["reopened", "opened"].includes(action)) {
+            const transitionId = eventTransitionMap.BeforeReview;
+            if (availableTransitions.some((transition) => transition.id === transitionId)) {
+              await JiraApi.transitionIssue(issueId, transitionId);
+            }
           }
-        }
-        else if (action === "closed" && pull_request.merged) {
-          const transitionId = eventTransitionMap.AfterMerge;
-          if (availableTransitions.some((transition) => transition.id === transitionId)) {
-            await JiraApi.transitionIssue(issueId, transitionId);
+          else if (action === "closed" && pull_request.merged) {
+            const transitionId = eventTransitionMap.AfterMerge;
+            if (availableTransitions.some((transition) => transition.id === transitionId)) {
+              await JiraApi.transitionIssue(issueId, transitionId);
+            }
           }
+        } catch (error) {
+          console.error(error)
         }
-      } catch (error) {
-        console.error(error)
-      }
+      });
     }
     else {
-      console.log(`No issue id found in ${prTitle}`);
+      console.log(`No issue id found in ${prContents}`);
     }
   });
 };
