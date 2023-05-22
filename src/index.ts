@@ -25,9 +25,9 @@ export = (app: Probot) => {
     const action: string = context.payload.action;
     const prContents = [pull_request.title, pull_request.body]
     const issueIdRegex = idPatternRegex(issuePrefixes);
-    const [issueId] = prContents.join(" ").match(issueIdRegex);
-    if (issueId) {
-      // issueIds.forEach(async (issueId) => {
+    const issueIds = prContents.join(" ").match(issueIdRegex);
+    if (issueIds.length) {
+      for await (const issueId of issueIds) {
         try {
           const getAvailableTransitions = async () => await JiraApi.getAvailableTransitions(issueId);
           if (["reopened", "opened"].includes(action)) {
@@ -53,7 +53,7 @@ export = (app: Probot) => {
         } catch (error) {
           console.error(error)
         }
-      // });
+      }
     }
     else {
       console.log(`No issue id found in ${prContents}`);
