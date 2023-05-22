@@ -3,7 +3,7 @@ import JiraApi from "./jira-api/jiraApi";
 
 const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`, "gi");
 
-const issuePrefixes = ["XPS", "VBI", "XPC","VALQ"];
+const issuePrefixes = ["XPS", "VBI", "XPC", "VALQ"];
 
 const transitions = {
   InCodeReview: "251",

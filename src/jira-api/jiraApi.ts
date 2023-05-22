@@ -35,11 +35,13 @@ export default class JiraApi {
                 return this.cache.get(issueId);
             }
             // console.log(`fetching transitions for issue ${issueId}`);
+            console.log(API_ROUTES.ISSUE_TRANSITION(issueId));
             const response = await axios.get(API_ROUTES.ISSUE_TRANSITION(issueId));
             console.log(response,'fetched')
             this.cache.set(issueId, response.data.transitions);
             return response.data.transitions;
         } catch (error) {
+            console.error(error)
             throw error;
         }
     }
