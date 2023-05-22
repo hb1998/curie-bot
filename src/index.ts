@@ -26,8 +26,9 @@ export = (app: Probot) => {
     const prContents = [pull_request.title, pull_request.body]
     const issueIdRegex = idPatternRegex(issuePrefixes);
     const issueIds = prContents.join(" ").match(issueIdRegex);
-    if (issueIds.length) {
-      for await (const issueId of issueIds) {
+    const uniqueIssueIds = getUniqueMembers(issueIds);
+    if (uniqueIssueIds.length) {
+      for await (const issueId of uniqueIssueIds) {
         try {
           const getAvailableTransitions = async () => await JiraApi.getAvailableTransitions(issueId);
           if (["reopened", "opened"].includes(action)) {
@@ -36,7 +37,7 @@ export = (app: Probot) => {
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
             } else {
-              console.log('No transition available')
+              console.log(`No transition available ${issueId}`)
             }
           }
           else if (action === "closed" && pull_request.merged) {
@@ -45,10 +46,10 @@ export = (app: Probot) => {
             if (availableTransitions.some((transition) => transition.id === transitionId)) {
               await JiraApi.transitionIssue(issueId, transitionId);
             } else {
-              console.log('No transition available')
+              console.log(`No transition available ${issueId}`)
             }
           } else {
-            console.log('No required events')
+            console.log(`No required events for issue ${issueId}`)
           }
         } catch (error) {
           console.error(error)
@@ -60,3 +61,5 @@ export = (app: Probot) => {
     }
   });
 };
+
+const getUniqueMembers = (array: string[]) => array.filter((value, index, array) => array.indexOf(value) === index);
