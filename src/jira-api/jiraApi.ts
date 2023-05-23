@@ -24,6 +24,7 @@ export default class JiraApi {
             })
             console.log(`Transitioned issue ${issueId} to ${transitionId}`)
         } catch (error) {
+            console.error(`Error transitioning issue ${issueId} to ${transitionId}`)
             throw error;
         }
 
@@ -40,7 +41,7 @@ export default class JiraApi {
             this.cache.set(issueId, response.data.transitions);
             return response.data.transitions;
         } catch (error) {
-            console.error(error)
+            console.error("Error fetching transitions")
             throw error;
         }
     }

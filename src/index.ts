@@ -52,7 +52,7 @@ export = (app: Probot) => {
             console.log(`No required events for issue ${issueId}`)
           }
         } catch (error) {
-          console.error(error)
+          console.error(error?.message)
         }
       }
     }
