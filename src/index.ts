@@ -1,22 +1,7 @@
 import { Probot } from "probot";
-import JiraApi from "./jira-api/jiraApi";
 
 const idPatternRegex = (issuePrefixes: string[]) => new RegExp(`\\b(${issuePrefixes.join('|')})-(\\d+)\\b`, "gi");
 
-const issuePrefixes = ["XPS", "VBI", "XPC", "VALQ30"];
-
-const transitions = {
-  InCodeReview: "251",
-  DevSignOff: "361",
-  InTesting: "231",
-  InDevelopment: "371"
-} as const;
-
-const eventTransitionMap = {
-  BeforeReview: transitions.InCodeReview,
-  AfterMerge: transitions.DevSignOff,
-  AfterClose: transitions.InDevelopment
-} as const;
 
 
 export = (app: Probot) => {
@@ -27,38 +12,7 @@ export = (app: Probot) => {
     const issueIdRegex = idPatternRegex(issuePrefixes);
     const issueIds = prContents.join(" ").match(issueIdRegex);
     const uniqueIssueIds = getUniqueMembers(issueIds);
-    if (uniqueIssueIds.length) {
-      for await (const issueId of uniqueIssueIds) {
-        try {
-          const getAvailableTransitions = async () => await JiraApi.getAvailableTransitions(issueId);
-          if (["reopened", "opened"].includes(action)) {
-            const transitionId = eventTransitionMap.BeforeReview;
-            const availableTransitions = await getAvailableTransitions();
-            if (availableTransitions.some((transition) => transition.id === transitionId)) {
-              await JiraApi.transitionIssue(issueId, transitionId);
-            } else {
-              console.log(`No transition available ${issueId}`)
-            }
-          }
-          else if (action === "closed" && pull_request.merged) {
-            const transitionId = eventTransitionMap.AfterMerge;
-            const availableTransitions = await getAvailableTransitions();
-            if (availableTransitions.some((transition) => transition.id === transitionId)) {
-              await JiraApi.transitionIssue(issueId, transitionId);
-            } else {
-              console.log(`No transition available ${issueId}`)
-            }
-          } else {
-            console.log(`No required events for issue ${issueId}`)
-          }
-        } catch (error) {
-          console.error(error?.message)
-        }
-      }
-    }
-    else {
-      console.log(`No issue id found in ${prContents}`);
-    }
+  
   });
 };
 
