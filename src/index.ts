@@ -1,5 +1,5 @@
 import { Probot } from "probot";
-import AzureDevopsApi, { IssueState } from "./azuredevops-api/azuredevopsApi";
+import AzureDevopsApi, { IssueState, repoProjectMap } from "./azuredevops-api/azuredevopsApi";
 
 
 
@@ -15,14 +15,20 @@ export = (app: Probot) => {
     if (uniqueIssueIds.length) {
       for await (const issueId of uniqueIssueIds) {
         try {
-          const response = await AzureDevopsApi.getIssueDetails(issueId);
+          const repoName = context.payload.repository.full_name;
+          const project = getProjectName(repoName);
+          if (!project) {
+            console.log(`No project found for ${repoName}`);
+            continue;
+          }
+          const response = await AzureDevopsApi.getIssueDetails(issueId, project);
           const state = response.data?.fields?.['System.State'];
           if (["reopened", "opened"].includes(action) && [IssueState.NEW, IssueState.IN_DEVELOPMENT].includes(state)) {
-            await AzureDevopsApi.transitionIssue(issueId, IssueState.IN_CODE_REVIEW);
+            await AzureDevopsApi.transitionIssue(issueId, project, IssueState.IN_CODE_REVIEW,);
             console.log(`moved ${issueId} from ${state} to ${IssueState.IN_CODE_REVIEW}`)
           }
           else if (action === "closed" && pull_request.merged && state === IssueState.IN_CODE_REVIEW) {
-            await AzureDevopsApi.transitionIssue(issueId, IssueState.DEVELOPMENT_SIGN_OFF);
+            await AzureDevopsApi.transitionIssue(issueId, project, IssueState.DEVELOPMENT_SIGN_OFF);
             console.log(`moved ${issueId} from ${state} to ${IssueState.DEVELOPMENT_SIGN_OFF}`)
           } else {
             console.log(`invalid state for the available transition. state -> ${state}, action -> ${action}, issue -> ${issueId}`)
@@ -38,5 +44,10 @@ export = (app: Probot) => {
 
   });
 };
+
+const getProjectName = (repoName: string) => {
+  const project = Object.keys(repoProjectMap).find(key => repoProjectMap[key].includes(repoName))
+  return project ? encodeURI(project) : null
+}
 
 const getUniqueMembers = (array: string[]) => array.filter((value, index, array) => array.indexOf(value) === index);
