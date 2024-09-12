@@ -32,20 +32,30 @@ export default class AzureDevopsApi {
 
 
     static getIssueDetails(issueId: string, project: string) {
-        return axios.get(API_ROUTES.ISSUE_URL(issueId, project))
+        try {    
+            return axios.get(API_ROUTES.ISSUE_URL(issueId, project))
+        } catch (error) {
+            console.log('Error in getIssueDetails', error);
+            throw error;
+        }
     }
 
     static transitionIssue(issueId: string, project: string, state: IssueState) {
-        return axios.patch(API_ROUTES.ISSUE_URL(issueId, project), [{
-            from: null,
-            op: "add",
-            path: "/fields/System.State",
+        try {
+            return axios.patch(API_ROUTES.ISSUE_URL(issueId, project), [{
+                from: null,
+                op: "add",
+                path: "/fields/System.State",
             value: state
         }], {
             headers: {
                 'Content-Type': 'application/json-patch+json'
-            }
-        })
+                }
+            })
+        } catch (error) {
+            console.log('Error in transitionIssue', error);
+            throw error;
+        }
     }
 
 

@@ -12,11 +12,15 @@ export = (app: Probot) => {
     const issueIdRegex = /(?<=AB#)\d+/g;
     const issueIds = prContents.join(" ").match(issueIdRegex);
     const uniqueIssueIds = getUniqueMembers(issueIds);
+    console.log('Repo Full Name', context.payload.repository.full_name);
+    console.log('Sender', context.payload.sender.login);
     if (uniqueIssueIds.length) {
+      console.log('ids found', issueIds)
       for await (const issueId of uniqueIssueIds) {
         try {
           const repoName = context.payload.repository.full_name;
           const project = getProjectName(repoName);
+          console.log('repo Name', repoName);
           if (!project) {
             console.log(`No project found for ${repoName}`);
             continue;
@@ -34,6 +38,7 @@ export = (app: Probot) => {
             console.log(`invalid state for the available transition. state -> ${state}, action -> ${action}, issue -> ${issueId}`)
           }
         } catch (error) {
+          console.log(`Error is Issue ${issueId} from ${context.payload.sender.login} of ${context.payload.repository.full_name}`)
           console.error(error.message)
         }
       }
