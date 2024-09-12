@@ -13,7 +13,15 @@ axios.interceptors.request.use(function (config) {
 export const repoProjectMap = {
     'Inforiver': ['visualbis/ibcslibrary'],
     'Inforiver Analytics': ['visualbis/inforiver-charts'],
-    'Inforiver MTE': ['visualbis/InforiverMDM'],
+    'Inforiver MTE': [
+        'visualbis/InforiverMDM',
+        'visualbis/turing-app',
+        'visualbis/turing-audit',
+        'visualbis/turing-api',
+        'visualbis/turing-mdm-worker',
+        'visualbis/turing-orchestrator',
+        'visualbis/database-servicelink',
+    ],
     'ValQ Enterprise': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'ValQ Project': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'xViz Visuals': ['visualbis/xviz'],
