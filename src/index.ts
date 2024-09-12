@@ -35,7 +35,7 @@ export = (app: Probot) => {
           }
           const response = await AzureDevopsApi.getIssueDetails(issueId, project);
           const state = response.data?.fields?.['System.State'];
-          if (["reopened", "opened"].includes(action) && [IssueState.NEW, IssueState.IN_DEVELOPMENT].includes(state)) {
+          if (["reopened", "opened", "edited"].includes(action) && [IssueState.NEW, IssueState.IN_DEVELOPMENT].includes(state)) {
             await AzureDevopsApi.transitionIssue(issueId, project, IssueState.IN_CODE_REVIEW,);
             console.log(truncateLog(`moved ${issueId} from ${state} to ${IssueState.IN_CODE_REVIEW}`))
           }
