@@ -25,6 +25,7 @@ export const repoProjectMap = {
     'ValQ Enterprise': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'ValQ Project': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'xViz Visuals': ['visualbis/xviz','visualbis/PerformanceFlow'],
+    'Inforiver filter+': ['visualbis/HTFilter'],
 
 }
 export const enum IssueState {
