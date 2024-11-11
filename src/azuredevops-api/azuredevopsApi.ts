@@ -11,7 +11,14 @@ axios.interceptors.request.use(function (config) {
 });
 
 export const repoProjectMap = {
-    'Inforiver': ['visualbis/ibcslibrary'],
+    'Inforiver': [
+        'visualbis/ibcslibrary',
+        "visualbis/turing-api",
+        "visualbis/turing-cron",
+        "visualbis/turing-app",
+        "visualbis/turing-worker",
+        "visualbis/turing-orchestrator"
+    ],
     'Inforiver Analytics': ['visualbis/inforiver-charts'],
     'EDITable': [
         'visualbis/InforiverMDM',
