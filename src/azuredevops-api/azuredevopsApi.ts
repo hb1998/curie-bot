@@ -29,6 +29,16 @@ export const repoProjectMap = {
         'visualbis/turing-orchestrator',
         'visualbis/database-servicelink',
     ],
+    'Editable Fabric': [
+        'visualbis/InforiverMDM',
+        'visualbis/turing-app',
+        'visualbis/turing-audit',
+        'visualbis/turing-api',
+        'visualbis/turing-mdm-worker',
+        'visualbis/turing-orchestrator',
+        'visualbis/database-servicelink',
+        'visualbis/fabric-matrix'
+    ],
     'ValQ Enterprise': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'ValQ Project': ['visualbis/valq', 'visualbis/ValqPowerBI'],
     'xViz Visuals': ['visualbis/xviz','visualbis/PerformanceFlow'],
