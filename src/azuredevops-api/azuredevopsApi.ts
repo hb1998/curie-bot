@@ -12,37 +12,37 @@ axios.interceptors.request.use(function (config) {
 
 export const repoProjectMap = {
     'Inforiver': [
-        'visualbis/ibcslibrary',
-        "visualbis/turing-api",
-        "visualbis/turing-cron",
-        "visualbis/turing-app",
-        "visualbis/turing-worker",
-        "visualbis/turing-orchestrator"
+        'lumelinc/InforiverMatrix',
+        "lumelinc/turing-api",
+        "lumelinc/turing-cron",
+        "lumelinc/turing-app",
+        "lumelinc/turing-worker",
+        "lumelinc/turing-orchestrator"
     ],
-    'Inforiver Analytics': ['visualbis/inforiver-charts'],
+    'Inforiver Analytics': ['lumelinc/inforiver-charts'],
     'EDITable': [
-        'visualbis/InforiverMDM',
-        'visualbis/turing-app',
-        'visualbis/turing-audit',
-        'visualbis/turing-api',
-        'visualbis/turing-mdm-worker',
-        'visualbis/turing-orchestrator',
-        'visualbis/database-servicelink',
+        'lumelinc/InforiverMDM',
+        'lumelinc/turing-app',
+        'lumelinc/turing-audit',
+        'lumelinc/turing-api',
+        'lumelinc/turing-mdm-worker',
+        'lumelinc/turing-orchestrator',
+        'lumelinc/database-servicelink',
     ],
     'Editable Fabric': [
-        'visualbis/InforiverMDM',
-        'visualbis/turing-app',
-        'visualbis/turing-audit',
-        'visualbis/turing-api',
-        'visualbis/turing-mdm-worker',
-        'visualbis/turing-orchestrator',
-        'visualbis/database-servicelink',
-        'visualbis/fabric-matrix'
+        'lumelinc/InforiverMDM',
+        'lumelinc/turing-app',
+        'lumelinc/turing-audit',
+        'lumelinc/turing-api',
+        'lumelinc/turing-mdm-worker',
+        'lumelinc/turing-orchestrator',
+        'lumelinc/database-servicelink',
+        'lumelinc/fabricApp'
     ],
-    'ValQ Enterprise': ['visualbis/valq', 'visualbis/ValqPowerBI'],
-    'ValQ Project': ['visualbis/valq', 'visualbis/ValqPowerBI'],
-    'xViz Visuals': ['visualbis/xviz','visualbis/PerformanceFlow'],
-    'Inforiver filter+': ['visualbis/HTFilter'],
+    'ValQ Enterprise': ['lumelinc/valq', 'lumelinc/ValqPowerBI'],
+    'ValQ Project': ['lumelinc/valq', 'lumelinc/ValqPowerBI'],
+    'xViz Visuals': ['lumelinc/xviz','lumelinc/PerformanceFlow'],
+    'Inforiver filter+': ['lumelinc/HTFilter'],
 
 }
 export const enum IssueState {
