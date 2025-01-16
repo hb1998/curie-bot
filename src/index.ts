@@ -8,6 +8,7 @@ export = (app: Probot) => {
     const pull_request = context.payload.pull_request;
     const action: string = context.payload.action;
     const prContents = [pull_request.title, pull_request.body]
+
     // ?<= is the lookbehind operator, its added to not have "AB" in the matched results but still have in the condition.
     const issueIdRegex = /(?<=AB#)\d+/g;
     const issueIds = prContents.join(" ").match(issueIdRegex);
@@ -19,7 +20,7 @@ export = (app: Probot) => {
     console.log('Repo Name', context.payload.repository.full_name);
     const sender = context.payload.sender.login;
     console.log('Sender', sender);
-    if(sender?.toLowerCase?.().includes?.("bot")){
+    if (sender?.toLowerCase?.().includes?.("bot")) {
       console.log("skipping the action since the sender is a bot")
       return;
     }
@@ -59,6 +60,8 @@ export = (app: Probot) => {
 };
 
 const getProjectName = (repoName: string) => {
+  console.log(repoName)
+  console.log(repoProjectMap)
   const project = Object.keys(repoProjectMap).find(key => repoProjectMap[key].includes(repoName))
   return project ? encodeURI(project) : null
 }
