@@ -39,6 +39,17 @@ export const repoProjectMap = {
         'lumelinc/database-servicelink',
         'lumelinc/fabricApp'
     ],
+    'Fabric App':[
+        'lumelinc/InforiverMDM',
+        'lumelinc/turing-app',
+        'lumelinc/turing-audit',
+        'lumelinc/turing-api',
+        'lumelinc/turing-mdm-worker',
+        'lumelinc/turing-orchestrator',
+        'lumelinc/database-servicelink',
+        'lumelinc/fabricApp',
+        'lumelinc/InforiverMatrix'
+    ],
     'ValQ Enterprise': ['lumelinc/valq', 'lumelinc/ValqPowerBI'],
     'ValQ Project': ['lumelinc/valq', 'lumelinc/ValqPowerBI'],
     'xViz Visuals': ['lumelinc/xviz','lumelinc/PerformanceFlow'],
