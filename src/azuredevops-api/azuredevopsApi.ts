@@ -29,7 +29,7 @@ export const repoProjectMap = {
         'lumelinc/turing-orchestrator',
         'lumelinc/database-servicelink',
     ],
-    'Editable Fabric': [
+    'Power Tables': [
         'lumelinc/InforiverMDM',
         'lumelinc/turing-app',
         'lumelinc/turing-audit',
@@ -37,7 +37,7 @@ export const repoProjectMap = {
         'lumelinc/turing-mdm-worker',
         'lumelinc/turing-orchestrator',
         'lumelinc/database-servicelink',
-        'lumelinc/fabricApp'
+        'lumelinc/FabricApp'
     ],
     'Fabric App':[
         'lumelinc/InforiverMDM',
@@ -47,7 +47,7 @@ export const repoProjectMap = {
         'lumelinc/turing-mdm-worker',
         'lumelinc/turing-orchestrator',
         'lumelinc/database-servicelink',
-        'lumelinc/fabricApp',
+        'lumelinc/FabricApp',
         'lumelinc/InforiverMatrix'
     ],
     'ValQ Enterprise': ['lumelinc/valq', 'lumelinc/ValqPowerBI'],
